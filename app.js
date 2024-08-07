@@ -1,8 +1,10 @@
+const express = require("express");
 const axios = require("axios");
 const Parser = require("rss-parser");
 const cron = require("node-cron");
 require("dotenv").config();
 
+const app = express();
 const parser = new Parser();
 
 const RSS_URL = process.env.RSS_URL;
@@ -79,5 +81,13 @@ async function main() {
 
 // 排程執行
 cron.schedule("0 * * * *", main);
+
+app.get("/", (req, res) => {
+  res.send("RSS Line Notifier is running");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 main();
