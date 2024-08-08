@@ -16,24 +16,34 @@ async function connectToDatabase() {
 
 // 儲存已傳送的通知
 async function saveSentNotifications(id, sentDate) {
-  const db = await connectToDatabase();
-  const notifications = db.collection("sent_notifications");
-  await notifications.updateOne(
-    { _id: id },
-    { $set: { sent_at: new Date(sentDate).toISOString() } },
-    { upsert: true }
-  );
+  try {
+    const db = await connectToDatabase();
+    const notifications = db.collection("sent_notifications");
+    await notifications.updateOne(
+      { _id: id },
+      { $set: { sent_at: new Date(sentDate).toISOString() } },
+      { upsert: true }
+    );
+  } catch (error) {
+    console.error("saving notification failed: ", error);
+    throw error;
+  }
 }
 
 // 取得已傳送的通知
 async function loadSentNotifications() {
-  const db = await connectToDatabase();
-  const notifications = db.collection("sent_notifications");
-  const result = await notifications.find().toArray();
-  return result.reduce((acc, notification) => {
-    acc[notification._id] = notification.sent_at;
-    return acc;
-  }, {});
+  try {
+    const db = await connectToDatabase();
+    const notifications = db.collection("sent_notifications");
+    const result = await notifications.find().toArray();
+    return result.reduce((acc, notification) => {
+      acc[notification._id] = notification.sent_at;
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error("loading notification failed: ", error);
+    throw error;
+  }
 }
 
 // 清除過期的通知
@@ -51,9 +61,9 @@ async function deleteOldNotifications(hours = 12) {
     const result = await notifications.deleteMany({
       sent_at: { $lt: cutOffDateString },
     });
-    console.log("Delete notifications successfully: ", result);
+    console.log(`Delete ${result.deletedCount} notifications successfully`);
   } catch (error) {
-    console.log("delete old notifications failed:", error);
+    console.error("delete old notifications failed:", error);
   }
 }
 

@@ -24,7 +24,7 @@ async function fetchAndFilterRSS() {
     const items = filterRSSItems(feed.items, conditions);
     return items;
   } catch (error) {
-    console.log("Fetch RSS Failed:", error);
+    console.error("Fetch RSS Failed:", error);
     return [];
   }
 }
@@ -52,9 +52,9 @@ async function sendToLineNotify(message, stickerPackageId, stickerId) {
         Authorization: `Bearer ${LINE_NOTIFY_TOKEN}`,
       },
     });
-    console.log("Sent to Line Notify successfully");
+    console.log("sent to Line Notify successfully");
   } catch (error) {
-    console.log(
+    console.error(
       "Send to Line Notify failed:",
       error.response ? error.response.data : error.message
     );
@@ -76,9 +76,10 @@ async function main() {
     await deleteOldNotifications();
 
     const sentNotifications = await loadSentNotifications();
+    // console.log(sentNotifications);
 
     for (let item of filteredItems) {
-      console.log(item);
+      // console.log(item);
 
       const itemId = item.guid || item.link;
       if (sentNotifications[itemId]) {
@@ -87,14 +88,27 @@ async function main() {
       }
 
       const num = getRandomNum(0, stickerIds.length - 1);
+      if (item.content.length > 1000) {
+        console.warn("content too long, truncating...");
+        item.content = item.content.substring(0, 997) + "...";
+      }
       const message = `${item.title}\n${item.link}\n${item.content}`;
-      await sendToLineNotify(message, stickerPkgId, stickerIds[num]);
+
+      try {
+        const result = await sendToLineNotify(
+          message,
+          stickerPkgId,
+          stickerIds[num]
+        );
+        console.log("Sent notification successfully");
+      } catch (error) {
+        console.error("Send notification failed: ", item.title, error);
+      }
 
       await saveSentNotifications(itemId, new Date().toISOString());
-      console.log(`Sent notification for ${itemId}`);
     }
   } catch (error) {
-    console.log("Main function failed:", error);
+    console.error("Main function failed:", error);
   }
 }
 
