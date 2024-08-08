@@ -1,7 +1,6 @@
 const express = require("express");
 const axios = require("axios");
 const Parser = require("rss-parser");
-const cron = require("node-cron");
 require("dotenv").config();
 
 const app = express();
@@ -79,18 +78,11 @@ async function main() {
   }
 }
 
-// 排程執行
-cron.schedule(
-  "0 * * * *",
-  () => {
-    console.log("Cron job started at", new Date().toISOString());
-    main();
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Taipei",
-  }
-);
+app.get("/api/run-cron-job", async (req, res) => {
+  console.log("Cron job start!");
+  await main();
+  res.send("Cron job executed");
+});
 
 app.get("/", (req, res) => {
   res.send("RSS Line Notifier is running");
@@ -100,4 +92,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-main();
+// main();
