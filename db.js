@@ -51,7 +51,7 @@ async function deleteOldNotifications(hours = 12) {
     const result = await notifications.deleteMany({
       sent_at: { $lt: cutOffDateString },
     });
-    console.log(`Delete notifications successfully`);
+    console.log("Delete notifications successfully: ", result);
   } catch (error) {
     console.log("delete old notifications failed:", error);
   }
