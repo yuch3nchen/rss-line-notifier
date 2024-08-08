@@ -88,18 +88,14 @@ async function main() {
       }
 
       const num = getRandomNum(0, stickerIds.length - 1);
-      if (item.content.length > 1000) {
-        console.warn("content too long, truncating...");
-        item.content = item.content.substring(0, 997) + "...";
-      }
-      const message = `${item.title}\n${item.link}\n${item.content}`;
 
+      const message = `${item.title}\n${item.link}\n${item.content}`;
+      if (message.length > 1000) {
+        console.warn("content too long, truncating...");
+        message = message.substring(0, 997) + "...";
+      }
       try {
-        const result = await sendToLineNotify(
-          message,
-          stickerPkgId,
-          stickerIds[num]
-        );
+        await sendToLineNotify(message, stickerPkgId, stickerIds[num]);
         console.log("Sent notification successfully");
       } catch (error) {
         console.error("Send notification failed: ", item.title, error);
