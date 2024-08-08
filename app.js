@@ -58,8 +58,8 @@ async function sendToLineNotify(message, stickerPackageId, stickerId) {
 }
 
 // 隨機取數
-function getRandomNum(max, min) {
-  return Math.floor(Math.random() * (max - min + 1));
+function getRandomNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // 主要執行
@@ -70,9 +70,9 @@ async function main() {
     const stickerIds = [52114110, 52114116, 52114122, 52114117];
     for (let item of filteredItems) {
       console.log(item);
-      const stickerId = getRandomNum(stickerIds.length - 1, 0);
+      const num = getRandomNum(0, stickerIds.length - 1);
       const message = `${item.title}\n${item.link}\n${item.content}`;
-      await sendToLineNotify(message, stickerPkgId, stickerId);
+      await sendToLineNotify(message, stickerPkgId, stickerIds[num]);
     }
   } catch (error) {
     console.log("Main function failed:", error);
@@ -80,7 +80,17 @@ async function main() {
 }
 
 // 排程執行
-cron.schedule("0 * * * *", main);
+cron.schedule(
+  "0 * * * *",
+  () => {
+    console.log("Cron job started at", new Date().toISOString());
+    main();
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Taipei",
+  }
+);
 
 app.get("/", (req, res) => {
   res.send("RSS Line Notifier is running");
