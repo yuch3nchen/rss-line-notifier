@@ -2,6 +2,11 @@ const express = require("express");
 const axios = require("axios");
 const Parser = require("rss-parser");
 require("dotenv").config();
+const {
+  saveSentNotifications,
+  loadSentNotifications,
+  deleteOldNotifications,
+} = require("./db.js");
 
 const app = express();
 const parser = new Parser();
@@ -67,11 +72,26 @@ async function main() {
     const filteredItems = await fetchAndFilterRSS();
     const stickerPkgId = 11539;
     const stickerIds = [52114110, 52114116, 52114122, 52114117];
+
+    await deleteOldNotifications();
+
+    const sentNotifications = await loadSentNotifications();
+
     for (let item of filteredItems) {
       console.log(item);
+
+      const itemId = item.guid || item.link;
+      if (sentNotifications[itemId]) {
+        console.log(`Notification for ${itemId} already sent, skipping`);
+        continue;
+      }
+
       const num = getRandomNum(0, stickerIds.length - 1);
       const message = `${item.title}\n${item.link}\n${item.content}`;
       await sendToLineNotify(message, stickerPkgId, stickerIds[num]);
+
+      await saveSentNotifications(itemId, new Date().toISOString());
+      console.log(`Sent notification for ${itemId}`);
     }
   } catch (error) {
     console.log("Main function failed:", error);
@@ -92,4 +112,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// main();
+main();
