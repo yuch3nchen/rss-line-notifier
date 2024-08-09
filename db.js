@@ -54,15 +54,13 @@ async function deleteOldNotifications(hours = 12) {
     const cutOffDate = new Date(Date.now() - hours * 60 * 60 * 1000);
     const cutOffDateString = cutOffDate.toISOString();
 
-    console.log(
-      `Attempint to delete notifications older than ${cutOffDateString}`
-    );
-
     const result = await notifications.deleteMany({
       sent_at: { $lt: cutOffDateString },
     });
     if (result.deletedCount) {
-      console.log(`Delete ${result.deletedCount} notifications successfully`);
+      console.log(
+        `Attemping to delete notifications older than ${cutOffDateString}, delete ${result.deletedCount} notifications successfully`
+      );
     }
   } catch (error) {
     console.error("delete old notifications failed:", error);

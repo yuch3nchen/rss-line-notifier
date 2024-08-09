@@ -98,7 +98,7 @@ async function main() {
 
       const itemId = item.guid || item.link;
       if (sentNotifications[itemId]) {
-        log("info", `Notification for ${itemId} alreaddy sent, skipping`);
+        log("debug", `Notification for ${itemId} alreaddy sent, skipping`);
         continue;
       }
 
@@ -126,7 +126,7 @@ async function main() {
         log("error", `Send notification failed: ${item.title},${error}`);
         throw error;
       }
-      log("info", `Sent ${sentCount} notifications`);
+      log("info", `Sent ${sentCount} notifications successfully`);
       return {
         processedItems: filteredItems.length,
         sentNotifications: sentCount,
