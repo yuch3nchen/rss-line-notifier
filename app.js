@@ -109,7 +109,7 @@ async function main() {
       // 字數過長處理
       if (message.length > 1000) {
         log("warn", "content too long, truncating...");
-        message = message.substring(0, 997) + "...";
+        message = message.substring(0, 100) + "...";
       }
 
       try {
