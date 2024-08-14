@@ -85,7 +85,9 @@ async function main() {
     log("info", `Fetched ${filteredItems.length} items`);
 
     const stickerPkgId = 11539;
-    const stickerIds = [52114110, 52114116, 52114122, 52114117];
+    const stickerIds = [
+      52114110, 52114113, 52114115, 52114116, 52114122, 52114121,
+    ];
 
     await deleteOldNotifications();
 
@@ -104,7 +106,7 @@ async function main() {
 
       const num = getRandomNum(0, stickerIds.length - 1);
 
-      const message = `${item.title}\n${item.link}\n${item.content}`;
+      let message = `${item.title}\n${item.link}\n${item.content}`;
 
       // 字數過長處理
       if (message.length > 1000) {
