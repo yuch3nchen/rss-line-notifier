@@ -16,12 +16,22 @@ const LINE_NOTIFY_TOKEN = process.env.LINE_NOTIFY_TOKEN;
 const PORT = process.env.PORT || 3000;
 const LOG_LEVEL = process.env.LOG_LEVEL || "info";
 
-const conditions = ["全台", "高雄", "高屏", "南部", "解除", "以南", "西半部"];
+const conditions = [
+  "全台",
+  "各地",
+  "高雄",
+  "高屏",
+  "南部",
+  "解除",
+  "以南",
+  "西半部",
+];
 
 // 抓取RSS資料並進行篩選
 async function fetchAndFilterRSS() {
   try {
     const feed = await parser.parseURL(RSS_URL);
+    // console.log(feed);
     const items = filterRSSItems(feed.items, conditions);
     return items;
   } catch (error) {
