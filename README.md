@@ -6,11 +6,11 @@
 ![image](https://img.shields.io/badge/RSS-FFA500?style=for-the-badge&logo=rss&logoColor=white)
 ![image](https://img.shields.io/badge/Line-00C300?style=for-the-badge&logo=line&logoColor=white)
 
-RSS Line Notifier is an automated notification system that sends weather alerts for southern Taiwan via Line Notify, built with Node.js and Express.
+RSS Line Notifier is an automated notification system that sends weather alerts for specific conditions of Taiwan via Line Notify, built with Node.js and Express.
 
 ## Features
 
-- Fetches and filters RSS feeds from the [Central Weather Bureau](https://www.cwa.gov.tw/V8/C/S/eservice/rss.html)
+- Fetches and filters RSS feeds from the [Central Weather Administration](https://www.cwa.gov.tw/V8/C/S/eservice/rss.html)
 - Sends filtered alerts to [Line Notify](https://notify-bot.line.me/doc/en/)
 - Stores and avoids duplicate notifications using [MongoDB](https://www.mongodb.com/)
 - Provides API endpoints for manual triggering and monitoring
@@ -20,6 +20,7 @@ RSS Line Notifier is an automated notification system that sends weather alerts 
 
 - Node.js
 - Express.js
+- Axios
 - MongoDB
 - Line Notify API
 - RSS Parser
@@ -29,7 +30,7 @@ RSS Line Notifier is an automated notification system that sends weather alerts 
 - Node.js (version 20.10.0)
 - MongoDB (version 6.8.0)
 - Line Notify Token
-- RSS feed URL (Central Weather Bureau)
+- RSS feed URL
 
 ## Installation
 
@@ -68,6 +69,28 @@ To manually trigger the notification process, send a GET request to:
 ```
 /api/run-cron-job
 ```
+
+## Configuration
+
+### Modifying Filter Conditions
+
+To change the filter conditions for RSS feeds:
+
+1. Open `app.js` in the project root directory.
+2. Find the following line:
+   ```javascript
+   const conditions = [
+     "全台",
+     "高雄",
+     "高屏",
+     "南部",
+     "解除",
+     "以南",
+     "西半部",
+   ];
+   ```
+3. Modify this array with your desired keywords.
+4. Save the file and restart the application.
 
 ## Deployment
 
