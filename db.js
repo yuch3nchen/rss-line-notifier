@@ -47,7 +47,7 @@ async function loadSentNotifications() {
 }
 
 // 清除過期的通知
-async function deleteOldNotifications(hours = 13) {
+async function deleteOldNotifications(hours = 24) {
   try {
     const db = await connectToDatabase();
     const notifications = db.collection("sent_notifications");
