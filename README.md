@@ -16,6 +16,10 @@ RSS Line Notifier is an automated notification system that sends weather alerts 
 - Provides API endpoints for manual triggering and monitoring
 - Deployed on [Render](https://render.com/) with scheduled execution via [Uptime Robot](https://uptimerobot.com/) or [Cron-job.org](https://cron-job.org/)
 
+## Preview
+
+<img src='./screenshot/screenshot.png' width="600px"/>
+
 ## Technologies Used
 
 - Node.js
