@@ -110,7 +110,7 @@ async function main() {
 
       const itemId = item.guid || item.link;
       if (sentNotifications[itemId]) {
-        log("debug", `Notification for ${itemId} alreaddy sent, skipping`);
+        log("debug", `Notification for ${itemId} already sent, skipping`);
         continue;
       }
 
@@ -124,26 +124,21 @@ async function main() {
         message = message.substring(0, 997) + "...";
       }
 
-      try {
-        const success = await sendToLineNotify(
-          message,
-          stickerPkgId,
-          stickerIds[num]
-        );
-        if (success) {
-          sentCount++;
-          await saveSentNotifications(itemId, new Date().toISOString());
-        }
-      } catch (error) {
-        log("error", `Send notification failed: ${item.title},${error}`);
-        throw error;
+      const success = await sendToLineNotify(
+        message,
+        stickerPkgId,
+        stickerIds[num]
+      );
+      if (success) {
+        sentCount++;
+        await saveSentNotifications(itemId, new Date().toISOString());
       }
-      log("info", `Sent ${sentCount} notifications successfully`);
-      return {
-        processedItems: filteredItems.length,
-        sentNotifications: sentCount,
-      };
     }
+    log("info", `Sent ${sentCount} notifications successfully`);
+    return {
+      processedItems: filteredItems.length,
+      sentNotifications: sentCount,
+    };
   } catch (error) {
     log("error", `Main function failed: ${error}`);
     throw error;
