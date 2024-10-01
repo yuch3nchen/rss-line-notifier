@@ -134,7 +134,13 @@ async function main() {
         await saveSentNotifications(itemId, new Date().toISOString());
       }
     }
-    log("info", `Sent ${sentCount} notifications successfully`);
+
+    let sentMsg = sentCount
+      ? `Sent ${sentCount} notifications successfully`
+      : "All notifications are up to date.";
+
+    log("info", sentMsg);
+
     return {
       processedItems: filteredItems.length,
       sentNotifications: sentCount,
