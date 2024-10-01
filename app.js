@@ -32,7 +32,7 @@ async function fetchAndFilterRSS() {
   try {
     const feed = await parser.parseURL(RSS_URL);
     // console.log(feed);
-    const items = filterRSSItems(feed.items, conditions);
+    const items = filterRSSItems(feed.items, conditions).reverse();
     return items;
   } catch (error) {
     log("error", `Fetch rss failed: ${error}`);
