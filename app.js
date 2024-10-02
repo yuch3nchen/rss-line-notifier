@@ -109,6 +109,7 @@ async function main() {
       // console.log(item);
 
       const itemId = item.guid || item.link;
+      const pubDate = item.pubDate;
       if (sentNotifications[itemId]) {
         log("debug", `Notification for ${itemId} already sent, skipping`);
         continue;
@@ -131,7 +132,7 @@ async function main() {
       );
       if (success) {
         sentCount++;
-        await saveSentNotifications(itemId, new Date().toISOString());
+        await saveSentNotifications(itemId, new Date().toISOString(), pubDate);
       }
     }
 

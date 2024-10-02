@@ -15,13 +15,13 @@ async function connectToDatabase() {
 }
 
 // 儲存已傳送的通知
-async function saveSentNotifications(id, sentDate) {
+async function saveSentNotifications(id, sentDate, pubDate) {
   try {
     const db = await connectToDatabase();
     const notifications = db.collection("sent_notifications");
     await notifications.updateOne(
       { _id: id },
-      { $set: { sent_at: new Date(sentDate).toISOString() } },
+      { $set: { sent_at: new Date(sentDate).toISOString(), pubDate } },
       { upsert: true }
     );
   } catch (error) {
