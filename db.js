@@ -21,7 +21,12 @@ async function saveSentNotifications(id, sentDate, pubDate) {
     const notifications = db.collection("sent_notifications");
     await notifications.updateOne(
       { _id: id },
-      { $set: { sent_at: new Date(sentDate).toISOString(), pubDate } },
+      {
+        $set: {
+          sent_at: new Date(sentDate).toISOString(),
+          pub_at: new Date(pubDate).toISOString(),
+        },
+      },
       { upsert: true }
     );
   } catch (error) {
