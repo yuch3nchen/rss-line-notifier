@@ -31,10 +31,8 @@ const conditions = [
 async function fetchAndFilterRSS() {
   try {
     const feeds = await parser.parseURL(RSS_URL);
-    // console.log(feed);
-    log("info", `Fetched ${feeds.items.length} items`);
     const items = filterRSSItems(feeds.items, conditions).reverse();
-    log("info", `Filtered ${items.length} items`);
+    log("info", `Fetched ${items.length}/${feeds.items.length} items`);
     return items;
   } catch (error) {
     log("error", `Fetch rss failed: ${error}`);
