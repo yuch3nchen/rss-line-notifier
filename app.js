@@ -30,9 +30,11 @@ const conditions = [
 // 抓取RSS資料並進行篩選
 async function fetchAndFilterRSS() {
   try {
-    const feed = await parser.parseURL(RSS_URL);
+    const feeds = await parser.parseURL(RSS_URL);
     // console.log(feed);
-    const items = filterRSSItems(feed.items, conditions).reverse();
+    log("info", `Fetched ${feeds.items.length} items`);
+    const items = filterRSSItems(feeds.items, conditions).reverse();
+    log("info", `Filtered ${items.length} items`);
     return items;
   } catch (error) {
     log("error", `Fetch rss failed: ${error}`);
@@ -92,7 +94,6 @@ function getRandomNum(min, max) {
 async function main() {
   try {
     const filteredItems = await fetchAndFilterRSS();
-    log("info", `Fetched ${filteredItems.length} items`);
 
     const stickerPkgId = 11539;
     const stickerIds = [
